@@ -146,20 +146,39 @@
             margin-bottom: 20px;
         }
         .calculate-order-btn {
-            background-color: #5a2d82;
-            color: white;
-            padding: 15px 30px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1.3em;
-            font-weight: bold;
-            transition: background-color 0.3s ease;
-            margin-top: 20px;
-        }
-        .calculate-order-btn:hover {
-            background-color: #7b4ea3;
-        }
+    background-color: #5a2d82;
+    color: white;
+    padding: 15px 30px; /* Default size for larger screens */
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.3em; /* Default font size for larger screens */
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Add transform for hover effect */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2); /* Add a subtle shadow to make it pop */
+
+    /* NEW: Sticky positioning */
+    position: fixed; /* Makes the button stick to the viewport */
+    bottom: 20px;    /* 20px from the bottom of the screen */
+    right: 20px;     /* 20px from the right of the screen */
+    z-index: 1000;   /* Ensures it stays on top of other content */
+    margin-top: 0;   /* Override any previous margin-top */
+}
+
+.calculate-order-btn:hover {
+    background-color: #7b4ea3;
+    transform: scale(1.05); /* Slightly enlarge on hover for feedback */
+}
+
+/* Media query for smaller screens (e.g., mobile phones) */
+@media (max-width: 768px) { /* Adjust this breakpoint if needed */
+    .calculate-order-btn {
+        padding: 12px 20px; /* Smaller padding for mobile */
+        font-size: 1em;    /* Smaller font size for mobile */
+        bottom: 15px;      /* Slightly closer to the bottom on mobile */
+        right: 15px;       /* Slightly closer to the right on mobile */
+    }
+}
         .global-result-display {
             margin-top: 30px;
             padding: 20px;
