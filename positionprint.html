@@ -610,181 +610,186 @@
 
     <script>
         // Self-executing anonymous function to encapsulate variables and avoid global conflicts
-        (function() {
-            // Your existing ranges and baseProfits arrays
-            const ranges = [
-                [25, 1980],[24.5,1650],[24,1650],[23.5,1320],[23,1320],[22.5,1650],[22,1590],
-                [21.5,1540],[21,1490],[20.5,1440],[20,1400],[19.5,1320],[19,1320],[18.5,1320],
-                [18,1320],[17.5,1320],[17,1260],[16.5,1210],[16,1160],[15.5,1110],[15,1070],
-                [14.5,990],[14,990],[13.5,990],[13,990],[12.5,990],[12,930],[11.5,880],[11,830],
-                [10.5,780],[10,740],[9.5,660],[9,660],[8.5,660],[8,660],[7.5,660],[7,600],
-                [6.5,550],[6,500],[5.5,450],[5,410],[4.5,330],[4,330],[3.5,440],[3,370],
-                [2.5,330],[2,270],[1.5,220],[1,170],[0.5,120],[0,80]
-            ];
+(function() {
+    // Your existing ranges and baseProfits arrays
+    const ranges = [
+        [25, 1980],[24.5,1650],[24,1650],[23.5,1320],[23,1320],[22.5,1650],[22,1590],
+        [21.5,1540],[21,1490],[20.5,1440],[20,1400],[19.5,1320],[19,1320],[18.5,1320],
+        [18,1320],[17.5,1320],[17,1260],[16.5,1210],[16,1160],[15.5,1110],[15,1070],
+        [14.5,990],[14,990],[13.5,990],[13,990],[12.5,990],[12,930],[11.5,880],[11,830],
+        [10.5,780],[10,740],[9.5,660],[9,660],[8.5,660],[8,660],[7.5,660],[7,600],
+        [6.5,550],[6,500],[5.5,450],[5,410],[4.5,330],[4,330],[3.5,440],[3,370],
+        [2.5,330],[2,270],[1.5,220],[1,170],[0.5,120],[0,80]
+    ];
 
-            const baseProfits = [110, 200, 270, 320, 350, 360, 385, 400, 405, 410];
+    const baseProfits = [110, 200, 270, 320, 350, 360, 385, 400, 405, 410];
 
-            // Constants for better readability and maintainability
-            const GST_RATE = 0.05;
-            const PROFIT_PER_ITEM_AFTER_10 = 5;
-            const WHATSAPP_PHONE_NUMBER = '917405235350'; // Your WhatsApp number with country code, no +, no spaces
+    // Constants for better readability and maintainability
+    const GST_RATE = 0.05;
+    const PROFIT_PER_ITEM_AFTER_10 = 5;
+    const WHATSAPP_PHONE_NUMBER = '917405235350'; // Your WhatsApp number with country code, no +, no spaces
 
-            function getShipping(totalWeight) {
-                for (let i = 0; i < ranges.length; i++) {
-                    // Changed from `>` to `>=` to match common range logic (e.g., 25 and above)
-                    if (totalWeight >= ranges[i][0]) {
-                        return ranges[i][1];
-                    }
+    function getShipping(totalWeight) {
+        for (let i = 0; i < ranges.length; i++) {
+            // Changed from `>` to `>=` to match common range logic (e.g., 25 and above)
+            if (totalWeight >= ranges[i][0]) {
+                return ranges[i][1];
+            }
+        }
+        return 0; // Default if weight is very low
+    }
+
+    function getTotalProfit(totalQty) {
+        if (totalQty <= 0) return 0;
+        return totalQty <= 10 ? (baseProfits[totalQty - 1] || 0) : (baseProfits[9] || 0) + (totalQty - 10) * PROFIT_PER_ITEM_AFTER_10;
+    }
+
+    function roundUp(val) {
+        return Math.ceil(val);
+    }
+
+    /**
+     * Calculates the total order cost for all selected items,
+     * distributing profit, shipping, and GST appropriately.
+     */
+    function calculateCombinedOrder() {
+        const imageItems = document.querySelectorAll('.image-item');
+        let totalQty = 0;
+        let totalWeight = 0;
+        const selectedItemDetails = []; // Array to store details of items with quantity > 0
+
+        // First pass: Collect data from all active input fields and accumulate totals
+        imageItems.forEach(itemDiv => {
+            const quantityInput = itemDiv.querySelector('.item-quantity-input');
+            const qty = parseInt(quantityInput.value) || 0; // Use 0 if blank or invalid
+
+            if (qty > 0) { // Only consider items with a quantity greater than 0
+                const productName = itemDiv.dataset.productName;
+                const purchaseRate = parseFloat(itemDiv.dataset.purchaseRate) || 0;
+                const weightage = parseFloat(itemDiv.dataset.weightage) || 0;
+                const minQty = parseInt(itemDiv.dataset.minQty) || 0;
+                const maxQty = parseInt(itemDiv.dataset.maxQty) || Infinity; // Use Infinity if no max
+
+                // Input validation specific to individual item min/max
+                if (qty < minQty) {
+                     alert(`For '${productName}', please enter a quantity of at least ${minQty} meters.`);
+                     quantityInput.focus();
+                     selectedItemDetails.length = 0; // Clear array to prevent further calculation
+                     return; // Exit forEach
                 }
-                return 0; // Default if weight is very low
-            }
-
-            function getTotalProfit(totalQty) {
-                if (totalQty <= 0) return 0;
-                return totalQty <= 10 ? (baseProfits[totalQty - 1] || 0) : (baseProfits[9] || 0) + (totalQty - 10) * PROFIT_PER_ITEM_AFTER_10;
-            }
-
-            function roundUp(val) {
-                return Math.ceil(val);
-            }
-
-            /**
-             * Calculates the total order cost for all selected items,
-             * distributing profit, shipping, and GST appropriately.
-             */
-            function calculateCombinedOrder() {
-                const imageItems = document.querySelectorAll('.image-item');
-                let totalQty = 0;
-                let totalWeight = 0;
-                const selectedItemDetails = []; // Array to store details of items with quantity > 0
-
-                // First pass: Collect data from all active input fields and accumulate totals
-                imageItems.forEach(itemDiv => {
-                    const quantityInput = itemDiv.querySelector('.item-quantity-input');
-                    const qty = parseInt(quantityInput.value) || 0; // Use 0 if blank or invalid
-
-                    if (qty > 0) { // Only consider items with a quantity greater than 0
-                        const productName = itemDiv.dataset.productName;
-                        const purchaseRate = parseFloat(itemDiv.dataset.purchaseRate) || 0;
-                        const weightage = parseFloat(itemDiv.dataset.weightage) || 0;
-                        const minQty = parseInt(itemDiv.dataset.minQty) || 0;
-                        const maxQty = parseInt(itemDiv.dataset.maxQty) || Infinity; // Use Infinity if no max
-
-                        // Input validation specific to individual item min/max
-                        if (qty < minQty) {
-                             alert(`For '${productName}', please enter a quantity of at least ${minQty} meters.`);
-                             quantityInput.focus();
-                             selectedItemDetails.length = 0; // Clear array to prevent further calculation
-                             return; // Exit forEach
-                        }
-                        if (qty > maxQty) {
-                            alert(`For '${productName}', quantity cannot exceed available stock (${maxQty} meters).`);
-                            quantityInput.focus();
-                            selectedItemDetails.length = 0; // Clear array
-                            return; // Exit forEach
-                        }
-
-                        totalQty += qty;
-                        totalWeight += qty * weightage;
-                        selectedItemDetails.push({
-                            productName: productName,
-                            qty: qty,
-                            cost: purchaseRate,
-                            weight: weightage,
-                            basicCost: qty * purchaseRate, // Basic cost for this specific item
-                        });
-                    }
-                });
-
-                const resultDisplayDiv = document.getElementById("global-result-display");
-                
-                // Display a message if no items with valid quantities are entered
-                if (totalQty === 0) {
-                    resultDisplayDiv.innerHTML = "<p style='color: #dc3545; font-weight: bold;'>Please enter a quantity greater than 0 for at least one fabric to calculate your order.</p>";
-                    return;
+                if (qty > maxQty) {
+                    alert(`For '${productName}', quantity cannot exceed available stock (${maxQty} meters).`);
+                    quantityInput.focus();
+                    selectedItemDetails.length = 0; // Clear array
+                    return; // Exit forEach
                 }
 
-                // Calculate total shipping and profit based on aggregated values
-                const shippingTotal = getShipping(totalWeight);
-                const totalProfit = getTotalProfit(totalQty);
-
-                let finalGrandTotal = 0;
-                let whatsappMessage = "Hello! I'd like to place an order from your website.\n\n*Order Details:*\n";
-                let resultHTML = '<hr><h2>Calculation Summary:</h2>';
-
-                // Second pass: Distribute shared costs (profit, shipping) and calculate final prices per item
-                selectedItemDetails.forEach(item => {
-                    // Distribute profit based on quantity proportion
-                    const itemProfitShare = (item.qty / totalQty) * totalProfit;
-
-                    // Distribute shipping based on weight proportion
-                    const itemShippingShare = totalWeight > 0 ? (item.qty * item.weight / totalWeight) * shippingTotal : 0;
-
-                    // Calculate subtotal before GST
-                    const itemSubtotal = item.basicCost + itemProfitShare + itemShippingShare;
-                    const itemGST = GST_RATE * itemSubtotal;
-                    const itemFinal = roundUp(itemSubtotal + itemGST); // Round up final item cost
-
-                    // Calculate cost per unit (meter) for display
-                    const itemPerUnit = item.qty > 0 ? roundUp(itemFinal / item.qty) : 0;
-                    const itemTotalCalculatedCost = itemPerUnit * item.qty; // Recalculate total based on rounded per-unit price
-
-                    finalGrandTotal += itemTotalCalculatedCost; // Add to overall total
-
-                    // Append details for each item to the result HTML
-                    resultHTML += `
-                        <p><b>${item.productName} (Qty: ${item.qty} Meters):</b><br>
-                        &nbsp;&nbsp;&nbsp;Your Exclusive Price Per Meter = ₹${itemPerUnit}<br>
-                        &nbsp;&nbsp;&nbsp;Total for ${item.productName} = ₹${itemPerUnit} &times; ${item.qty} = ₹${itemTotalCalculatedCost}</p>
-                    `;
-
-                    // Add details to WhatsApp message string
-                    whatsappMessage += `\n*${item.productName}*:\n`;
-                    whatsappMessage += `Qty: ${item.qty} Meters\n`;
-                    whatsappMessage += `Price Per Meter: ₹${itemPerUnit}\n`; 
-                    whatsappMessage += `Subtotal: ₹${itemTotalCalculatedCost}\n`;
+                totalQty += qty;
+                totalWeight += qty * weightage;
+                selectedItemDetails.push({
+                    productName: productName,
+                    qty: qty,
+                    cost: purchaseRate,
+                    weight: weightage,
+                    basicCost: qty * purchaseRate, // Basic cost for this specific item
                 });
-
-                // Add overall totals and instruction for payment link to WhatsApp message
-                whatsappMessage += `\n*Your Grand Total: ₹${finalGrandTotal}*\n\n`;
-                whatsappMessage += `Please send the payment link for ₹${finalGrandTotal}.`;
-
-                // URL-encode the WhatsApp message
-                const encodedWhatsAppMessage = encodeURIComponent(whatsappMessage);
-                const whatsappLink = `https://wa.me/${WHATSAPP_PHONE_NUMBER}?text=${encodedWhatsAppMessage}`;
-
-                // Final grand total and WhatsApp order button
-                resultHTML += `
-                    <p><strong>Your Grand Total = ₹${finalGrandTotal}</strong></p>
-                    <a href="${whatsappLink}" target="_blank" style="text-decoration: none;">
-                        <button id="whatsapp-order-btn">
-                            Send Order via WhatsApp
-                        </button>
-                    </a>
-                `;
-
-                resultDisplayDiv.innerHTML = resultHTML; // Update the result div on the page
             }
+        });
 
-            // Initialize the calculator: attach event listener to "Calculate Total Order" button
-            document.addEventListener('DOMContentLoaded', function() {
-                const calculateOrderBtn = document.getElementById("calculate-order-btn");
-                if (calculateOrderBtn) {
-                    calculateOrderBtn.addEventListener('click', calculateCombinedOrder);
-                } else {
-                    console.warn("Global calculate button not found. Multi-item calculator might not initialize correctly.");
-                }
+        const resultDisplayDiv = document.getElementById("global-result-display");
 
-                // Set min attribute for quantity inputs from data attributes on page load
-                document.querySelectorAll('.image-item').forEach(itemDiv => {
-                    const quantityInput = itemDiv.querySelector('.item-quantity-input');
-                    const minQty = parseInt(itemDiv.dataset.minQty) || 0; // Default to 0 if min_qty is not set
-                    quantityInput.min = minQty;
-                    // Note: value is left blank/empty as requested
-                });
-            });
+        // Display a message if no items with valid quantities are entered
+        if (totalQty === 0) {
+            resultDisplayDiv.innerHTML = "<p style='color: #dc3545; font-weight: bold;'>Please enter a quantity greater than 0 for at least one fabric to calculate your order.</p>";
+            // Scroll to the message if no items are selected
+            resultDisplayDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            return;
+        }
 
-        })(); // End of self-executing function
+        // Calculate total shipping and profit based on aggregated values
+        const shippingTotal = getShipping(totalWeight);
+        const totalProfit = getTotalProfit(totalQty);
+
+        let finalGrandTotal = 0;
+        let whatsappMessage = "Hello! I'd like to place an order from your website.\n\n*Order Details:*\n";
+        let resultHTML = '<hr><h2>Calculation Summary:</h2>';
+
+        // Second pass: Distribute shared costs (profit, shipping) and calculate final prices per item
+        selectedItemDetails.forEach(item => {
+            // Distribute profit based on quantity proportion
+            const itemProfitShare = (item.qty / totalQty) * totalProfit;
+
+            // Distribute shipping based on weight proportion
+            const itemShippingShare = totalWeight > 0 ? (item.qty * item.weight / totalWeight) * shippingTotal : 0;
+
+            // Calculate subtotal before GST
+            const itemSubtotal = item.basicCost + itemProfitShare + itemShippingShare;
+            const itemGST = GST_RATE * itemSubtotal;
+            const itemFinal = roundUp(itemSubtotal + itemGST); // Round up final item cost
+
+            // Calculate cost per unit (meter) for display
+            const itemPerUnit = item.qty > 0 ? roundUp(itemFinal / item.qty) : 0;
+            const itemTotalCalculatedCost = itemPerUnit * item.qty; // Recalculate total based on rounded per-unit price
+
+            finalGrandTotal += itemTotalCalculatedCost; // Add to overall total
+
+            // Append details for each item to the result HTML
+            resultHTML += `
+                <p><b>${item.productName} (Qty: ${item.qty} Meters):</b><br>
+                &nbsp;&nbsp;&nbsp;Your Exclusive Price Per Meter = ₹${itemPerUnit}<br>
+                &nbsp;&nbsp;&nbsp;Total for ${item.productName} = ₹${itemPerUnit} &times; ${item.qty} = ₹${itemTotalCalculatedCost}</p>
+            `;
+
+            // Add details to WhatsApp message string
+            whatsappMessage += `\n*${item.productName}*:\n`;
+            whatsappMessage += `Qty: ${item.qty} Meters\n`;
+            whatsappMessage += `Price Per Meter: ₹${itemPerUnit}\n`;
+            whatsappMessage += `Subtotal: ₹${itemTotalCalculatedCost}\n`;
+        });
+
+        // Add overall totals and instruction for payment link to WhatsApp message
+        whatsappMessage += `\n*Your Grand Total: ₹${finalGrandTotal}*\n\n`;
+        whatsappMessage += `Please send the payment link for ₹${finalGrandTotal}.`;
+
+        // URL-encode the WhatsApp message
+        const encodedWhatsAppMessage = encodeURIComponent(whatsappMessage);
+        const whatsappLink = `https://wa.me/${WHATSAPP_PHONE_NUMBER}?text=${encodedWhatsAppMessage}`;
+
+        // Final grand total and WhatsApp order button
+        resultHTML += `
+            <p><strong>Your Grand Total = ₹${finalGrandTotal}</strong></p>
+            <a href="${whatsappLink}" target="_blank" style="text-decoration: none;">
+                <button id="whatsapp-order-btn">
+                    Send Order via WhatsApp
+                </button>
+            </a>
+        `;
+
+        resultDisplayDiv.innerHTML = resultHTML; // Update the result div on the page
+
+        // NEW: Scroll the view to the result display block
+        resultDisplayDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // Initialize the calculator: attach event listener to "Calculate Total Order" button
+    document.addEventListener('DOMContentLoaded', function() {
+        const calculateOrderBtn = document.getElementById("calculate-order-btn");
+        if (calculateOrderBtn) {
+            calculateOrderBtn.addEventListener('click', calculateCombinedOrder);
+        } else {
+            console.warn("Global calculate button not found. Multi-item calculator might not initialize correctly.");
+        }
+
+        // Set min attribute for quantity inputs from data attributes on page load
+        document.querySelectorAll('.image-item').forEach(itemDiv => {
+            const quantityInput = itemDiv.querySelector('.item-quantity-input');
+            const minQty = parseInt(itemDiv.dataset.minQty) || 0; // Default to 0 if min_qty is not set
+            quantityInput.min = minQty;
+            // Note: value is left blank/empty as requested
+        });
+    });
+
+})(); // End of self-executing function
     </script>
 
 </body>
