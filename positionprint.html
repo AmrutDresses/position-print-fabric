@@ -84,7 +84,27 @@
             font-weight: bold;
             font-size: 1em;
         }
+         /* Zoom effect for product images on hover */
+.image-item img {
+    /* Your existing styles for .image-item img */
+    width: 100%;
+    height: 250px;
+    object-fit: contain;
+    display: block;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
 
+    /* New styles for zoom effect */
+    transition: transform 0.3s ease-in-out; /* Smooth transition for the zoom */
+}
+
+.image-item img:hover {
+    transform: scale(1.05); /* Zooms in by 5% on hover */
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2); /* Optional: Adds a shadow for emphasis */
+    cursor: zoom-in; /* Changes cursor to a zoom-in icon */
+}
         /* Quantity Input for each item */
         .item-quantity-wrapper {
             padding-top: 10px;
