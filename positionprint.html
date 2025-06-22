@@ -51,7 +51,7 @@
             overflow: hidden;
             background-color: #fff;
             text-align: center;
-            padding-bottom: 10px;
+            padding: 15px; /* Increased padding for calculator elements */
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -62,15 +62,92 @@
             object-fit: contain; /* Ensures entire image is visible, no cropping */
             display: block;
             border-bottom: 1px solid #eee;
-            padding: 5px; /* Small padding if image touches borders */
+            padding-bottom: 10px; /* Space between image and caption */
+            margin-bottom: 10px;
             box-sizing: border-box; /* Include padding in width/height */
         }
         .image-item p {
-            margin-top: 10px;
+            margin-top: 5px;
+            margin-bottom: 15px;
             font-size: 0.9em;
             color: #666;
-            padding: 0 10px;
+            padding: 0 5px;
         }
+        /* Calculator specific styles */
+        .calculator-section {
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+            margin-top: 15px;
+            text-align: left; /* Align text within calculator for labels */
+        }
+        .calculator-section label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.95em;
+            color: #444;
+        }
+        .calculator-section input[type="number"] {
+            width: calc(100% - 20px); /* Adjust width to fit with padding */
+            padding: 8px 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box; /* Include padding in width */
+        }
+        .calculator-section button {
+            background-color: #5a2d82;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            width: 100%;
+            box-sizing: border-box;
+            transition: background-color 0.3s ease;
+        }
+        .calculator-section button:hover {
+            background-color: #7b4ea3;
+        }
+        .calculator-result {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            min-height: 60px; /* Ensure space for result */
+            text-align: center;
+            font-size: 1.1em;
+            word-wrap: break-word; /* Prevent long text from overflowing */
+        }
+        .calculator-result strong {
+            display: block; /* Make strong tags stack */
+            margin-bottom: 5px;
+        }
+        .calculator-result .copy-input {
+            width: calc(100% - 20px);
+            font-weight: bold;
+            text-align: center;
+            padding: 5px;
+            border: 1px dashed #ccc;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+        .calculator-result .whatsapp-btn {
+            display: inline-block;
+            background-color: #25D366;
+            color: white;
+            padding: 10px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            margin-top: 10px;
+            transition: background-color 0.3s ease;
+        }
+        .calculator-result .whatsapp-btn:hover {
+            background-color: #1DA851;
+        }
+
         .seo-section {
             max-width: 800px;
             margin: 40px auto;
@@ -139,6 +216,12 @@
             data-max-qty="500">
             <img src="A5890080320251935_PURE_NATURAL_CREPE_POSITION_PRINT_FABRIC_4.webp" alt="Elegant Pure Natural Crepe Position Print Fabric 4">
             <p>Vibrant floral and geometric blend</p>
+            <div class="calculator-section">
+                <label for="quantity-1">Quantity (in meters):</label>
+                <input type="number" id="quantity-1" step="1" min="10" value="10">
+                <button class="calculate-btn">Calculate</button>
+                <div class="calculator-result" id="result-1"></div>
+            </div>
         </div>
 
         <div class="image-item"
@@ -150,6 +233,12 @@
             data-max-qty="600">
             <img src="A5890080320251935_PURE_NATURAL_CREPE_POSITION_PRINT_FABRIC_3.webp" alt="Luxurious Crepe Fabric with Unique Print 3">
             <p>Abstract design with rich color palette</p>
+            <div class="calculator-section">
+                <label for="quantity-2">Quantity (in meters):</label>
+                <input type="number" id="quantity-2" step="1" min="5" value="5">
+                <button class="calculate-btn">Calculate</button>
+                <div class="calculator-result" id="result-2"></div>
+            </div>
         </div>
 
         <div class="image-item"
@@ -161,6 +250,12 @@
             data-max-qty="400">
             <img src="A5890080320251935_PURE_NATURAL_CREPE_POSITION_PRINT_FABRIC_2.webp" alt="Premium Position Print Crepe Fabric Sample 2">
             <p>Intricate motif on soft crepe</p>
+            <div class="calculator-section">
+                <label for="quantity-3">Quantity (in meters):</label>
+                <input type="number" id="quantity-3" step="1" min="15" value="15">
+                <button class="calculate-btn">Calculate</button>
+                <div class="calculator-result" id="result-3"></div>
+            </div>
         </div>
 
         <div class="image-item"
@@ -172,6 +267,12 @@
             data-max-qty="700">
             <img src="A5890080320251935_PURE_NATURAL_CREPE_POSITION_PRINT_FABRIC_1.webp" alt="High-Quality Natural Crepe Fabric Print 1">
             <p>Delicate patterns for bespoke fashion</p>
+            <div class="calculator-section">
+                <label for="quantity-4">Quantity (in meters):</label>
+                <input type="number" id="quantity-4" step="1" min="20" value="20">
+                <button class="calculate-btn">Calculate</button>
+                <div class="calculator-result" id="result-4"></div>
+            </div>
         </div>
 
         <div class="image-item"
@@ -183,6 +284,12 @@
             data-max-qty="550">
             <img src="A5890080320251935_PURE_NATURAL_CREPE_POSITION_PRINT_FABRIC.webp" alt="Exclusive Pure Natural Crepe Fabric Collection">
             <p>Full view of exquisite crepe fabric</p>
+            <div class="calculator-section">
+                <label for="quantity-5">Quantity (in meters):</label>
+                <input type="number" id="quantity-5" step="1" min="10" value="10">
+                <button class="calculate-btn">Calculate</button>
+                <div class="calculator-result" id="result-5"></div>
+            </div>
         </div>
     </div>
 
@@ -212,6 +319,132 @@
             <a href="https://bollywoodfabricstore.com/product-category/fabrics/position-print-fabric-collection/" target="_blank" rel="noopener">Shop Our Full Fabric Collection Now</a>
         </div>
     </div>
+
+    <script>
+        // Data ranges and base profits from your provided code
+        const ranges = [
+            [25, 1980],[24.5,1650],[24,1650],[23.5,1320],[23,1320],[22.5,1650],[22,1590],
+            [21.5,1540],[21,1490],[20.5,1440],[20,1400],[19.5,1320],[19,1320],[18.5,1320],
+            [18,1320],[17.5,1320],[17,1260],[16.5,1210],[16,1160],[15.5,1110],[15,1070],
+            [14.5,990],[14,990],[13.5,990],[13,990],[12.5,990],[12,930],[11.5,880],[11,830],
+            [10.5,780],[10,740],[9.5,660],[9,660],[8.5,660],[8,660],[7.5,660],[7,600],
+            [6.5,550],[6,500],[5.5,450],[5,410],[4.5,330],[4,330],[3.5,440],[3,370],
+            [2.5,330],[2,270],[1.5,220],[1,170],[0.5,120],[0,80]
+        ];
+
+        const baseProfits = [110, 200, 270, 320, 350, 360, 385, 400, 405, 410];
+
+        function getShipping(weight) {
+            for (let i = 0; i < ranges.length; i++) {
+                if (weight > ranges[i][0]) {
+                    return ranges[i][1];
+                }
+            }
+            return 0; // Default if weight is very low
+        }
+
+        function calculateTotal(cost, weightage, quantity) {
+            const totalWeight = quantity * weightage;
+            const basicCost = cost * quantity;
+            const shipping = getShipping(totalWeight);
+
+            let profit = 0;
+            if (quantity <= 10) {
+                // Ensure index doesn't go out of bounds if quantity is 0 or negative, though min will prevent that.
+                // Using Math.max(0, quantity - 1) to ensure non-negative index
+                profit = baseProfits[Math.max(0, quantity - 1)] || 0; 
+            } else {
+                profit = 410 + (quantity - 10) * 5;
+            }
+
+            const subtotal = basicCost + profit + shipping;
+            const gst = subtotal * 0.05; // 5% GST
+            const pricePerMeter = Math.ceil((subtotal + gst) / quantity);
+            const total = pricePerMeter * quantity; // Recalculate total with rounded pricePerMeter
+
+            return {
+                total: total.toFixed(2),
+                pricePerMeter: pricePerMeter,
+                resultText: pricePerMeter + " ₹ per meter for " + quantity + " meter"
+            };
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Get all image-item divs
+            const imageItems = document.querySelectorAll('.image-item');
+
+            imageItems.forEach((item, index) => {
+                const calculateBtn = item.querySelector('.calculate-btn');
+                const quantityInput = item.querySelector('input[type="number"]');
+                const resultDiv = item.querySelector('.calculator-result');
+
+                // Read data attributes from the parent image-item div
+                const productName = item.dataset.productName;
+                const sellingRate = parseFloat(item.dataset.sellingRate);
+                const purchaseRate = parseFloat(item.dataset.purchaseRate);
+                const weightage = parseFloat(item.dataset.weightage);
+                const minQty = parseInt(item.dataset.minQty);
+                const maxQty = parseInt(item.dataset.maxQty);
+
+                // Set min and max for the quantity input field dynamically
+                quantityInput.min = minQty;
+                quantityInput.value = minQty; // Set initial value to minQty
+                if (maxQty > 0) { // Only set max if it's a valid number
+                    quantityInput.max = maxQty;
+                } else {
+                    quantityInput.removeAttribute('max'); // Remove max if no stock limit
+                }
+
+                // Calculate button click handler
+                calculateBtn.addEventListener('click', function () {
+                    const quantity = parseInt(quantityInput.value);
+
+                    if (isNaN(quantity) || quantity < minQty) {
+                        alert(`Please enter a quantity of at least ${minQty} meters.`);
+                        quantityInput.value = minQty; // Reset to minQty
+                        quantityInput.focus();
+                        return;
+                    }
+                    if (maxQty > 0 && quantity > maxQty) {
+                        alert(`Quantity cannot exceed available stock (${maxQty} meters).`);
+                        quantityInput.value = maxQty; // Reset to maxQty
+                        quantityInput.focus();
+                        return;
+                    }
+
+                    // For calculation, we use purchase_rate + purchase_charges (if any, though not in data-attrib yet)
+                    // Based on your original code, it was cost_per_item = purchase_rate + purchase_charges;
+                    // Since purchase_charges is not in data attributes, we'll use purchaseRate for now as 'cost'
+                    // If you intend purchase_charges to be part of data, let me know, we can add it.
+                    const cost = purchaseRate; 
+
+                    const calc = calculateTotal(cost, weightage, quantity);
+                    const finalAmount = calc.total;
+                    const resultTextFull = `${calc.pricePerMeter} ₹ per meter for ${quantity} meter | Final Total: ₹${calc.total}`;
+                    
+                    const currentPageUrl = window.location.href; // This will be the GitHub Pages URL
+                    const message = encodeURIComponent(`Product: ${productName}\nOrder: ${calc.pricePerMeter} ₹ per meter for ${quantity} meter\nTotal: ₹${calc.total}\nLink: ${currentPageUrl}`);
+                    const whatsappUrl = `https://wa.me/917405235350?text=${message}`;
+
+                    resultDiv.innerHTML = `
+                        <strong style='font-size: 1.1em;'>${calc.pricePerMeter} ₹ per meter</strong><br>
+                        <strong style='font-size: 1.1em;'>Total for ${quantity}m: ₹${calc.total}</strong><br>
+                        <input type='text' class='copy-input' value='${resultTextFull}' readonly
+                            onclick="this.select(); document.execCommand('copy'); alert('Copied to clipboard!');"
+                            title="Click to copy"><br>
+                        <a href="${whatsappUrl}" target="_blank" class="whatsapp-btn">Order on WhatsApp</a>
+                    `;
+                });
+
+                // Optional: Trigger calculation on Enter key press in quantity field
+                quantityInput.addEventListener('keypress', function(event) {
+                    if (event.key === 'Enter') {
+                        calculateBtn.click();
+                    }
+                });
+            });
+        });
+    </script>
 
 </body>
 </html>
