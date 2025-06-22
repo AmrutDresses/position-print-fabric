@@ -66,12 +66,23 @@
             margin-bottom: 10px;
             box-sizing: border-box; /* Include padding in width/height */
         }
-        .image-item p {
+        .image-item .product-info {
             margin-top: 5px;
             margin-bottom: 15px;
             font-size: 0.9em;
             color: #666;
             padding: 0 5px;
+        }
+        .image-item .product-info strong {
+            display: block;
+            font-size: 1.1em;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        .image-item .product-info span {
+            color: #5a2d82;
+            font-weight: bold;
+            font-size: 1em;
         }
         /* Calculator specific styles */
         .calculator-section {
@@ -215,7 +226,7 @@
             data-min-qty="10"
             data-max-qty="500">
             <img src="A5890080320251935_PURE_NATURAL_CREPE_POSITION_PRINT_FABRIC_4.webp" alt="Elegant Pure Natural Crepe Position Print Fabric 4">
-            <p>Vibrant floral and geometric blend</p>
+            <p class="product-info"><strong>Crepe Floral Elegance</strong><br><span>Starting from ₹650 per meter</span></p>
             <div class="calculator-section">
                 <label for="quantity-1">Quantity (in meters):</label>
                 <input type="number" id="quantity-1" step="1" min="10" value="10">
@@ -232,7 +243,7 @@
             data-min-qty="5"
             data-max-qty="600">
             <img src="A5890080320251935_PURE_NATURAL_CREPE_POSITION_PRINT_FABRIC_3.webp" alt="Luxurious Crepe Fabric with Unique Print 3">
-            <p>Abstract design with rich color palette</p>
+            <p class="product-info"><strong>Crepe Abstract Flow</strong><br><span>Starting from ₹720 per meter</span></p>
             <div class="calculator-section">
                 <label for="quantity-2">Quantity (in meters):</label>
                 <input type="number" id="quantity-2" step="1" min="5" value="5">
@@ -249,7 +260,7 @@
             data-min-qty="15"
             data-max-qty="400">
             <img src="A5890080320251935_PURE_NATURAL_CREPE_POSITION_PRINT_FABRIC_2.webp" alt="Premium Position Print Crepe Fabric Sample 2">
-            <p>Intricate motif on soft crepe</p>
+            <p class="product-info"><strong>Crepe Motif Classic</strong><br><span>Starting from ₹680 per meter</span></p>
             <div class="calculator-section">
                 <label for="quantity-3">Quantity (in meters):</label>
                 <input type="number" id="quantity-3" step="1" min="15" value="15">
@@ -266,7 +277,7 @@
             data-min-qty="20"
             data-max-qty="700">
             <img src="A5890080320251935_PURE_NATURAL_CREPE_POSITION_PRINT_FABRIC_1.webp" alt="High-Quality Natural Crepe Fabric Print 1">
-            <p>Delicate patterns for bespoke fashion</p>
+            <p class="product-info"><strong>Crepe Delicate Pattern</strong><br><span>Starting from ₹600 per meter</span></p>
             <div class="calculator-section">
                 <label for="quantity-4">Quantity (in meters):</label>
                 <input type="number" id="quantity-4" step="1" min="20" value="20">
@@ -283,7 +294,7 @@
             data-min-qty="10"
             data-max-qty="550">
             <img src="A5890080320251935_PURE_NATURAL_CREPE_POSITION_PRINT_FABRIC.webp" alt="Exclusive Pure Natural Crepe Fabric Collection">
-            <p>Full view of exquisite crepe fabric</p>
+            <p class="product-info"><strong>Crepe Exclusive Full Print</strong><br><span>Starting from ₹750 per meter</span></p>
             <div class="calculator-section">
                 <label for="quantity-5">Quantity (in meters):</label>
                 <input type="number" id="quantity-5" step="1" min="10" value="10">
@@ -350,8 +361,6 @@
 
             let profit = 0;
             if (quantity <= 10) {
-                // Ensure index doesn't go out of bounds if quantity is 0 or negative, though min will prevent that.
-                // Using Math.max(0, quantity - 1) to ensure non-negative index
                 profit = baseProfits[Math.max(0, quantity - 1)] || 0; 
             } else {
                 profit = 410 + (quantity - 10) * 5;
@@ -381,7 +390,7 @@
                 // Read data attributes from the parent image-item div
                 const productName = item.dataset.productName;
                 const sellingRate = parseFloat(item.dataset.sellingRate);
-                const purchaseRate = parseFloat(item.dataset.purchaseRate);
+                const purchaseRate = parseFloat(item.dataset.purchaseRate); // Used for calculation
                 const weightage = parseFloat(item.dataset.weightage);
                 const minQty = parseInt(item.dataset.minQty);
                 const maxQty = parseInt(item.dataset.maxQty);
@@ -412,10 +421,7 @@
                         return;
                     }
 
-                    // For calculation, we use purchase_rate + purchase_charges (if any, though not in data-attrib yet)
-                    // Based on your original code, it was cost_per_item = purchase_rate + purchase_charges;
-                    // Since purchase_charges is not in data attributes, we'll use purchaseRate for now as 'cost'
-                    // If you intend purchase_charges to be part of data, let me know, we can add it.
+                    // For calculation, we use purchaseRate as 'cost'
                     const cost = purchaseRate; 
 
                     const calc = calculateTotal(cost, weightage, quantity);
